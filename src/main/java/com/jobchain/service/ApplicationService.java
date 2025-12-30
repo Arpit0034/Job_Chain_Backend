@@ -26,12 +26,6 @@ public class ApplicationService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    /**
-     * Submits a new job application and records on blockchain.
-     *
-     * @param request CreateApplicationRequest with candidate details
-     * @return Saved ApplicationEntity with blockchain transaction hash
-     */
     public ApplicationEntity submitApplication(CreateApplicationRequest request) {
         try {
             log.info("Submitting application for vacancy: {}, candidate: {}",
@@ -91,12 +85,6 @@ public class ApplicationService {
         }
     }
 
-    /**
-     * Retrieves all applications for a specific vacancy.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return List of applications
-     */
     public List<ApplicationEntity> getApplicationsByVacancy(UUID vacancyId) {
         try {
             log.info("Fetching applications for vacancy: {}", vacancyId);
@@ -109,12 +97,6 @@ public class ApplicationService {
         }
     }
 
-    /**
-     * Retrieves a specific application by ID.
-     *
-     * @param id UUID of the application
-     * @return Optional containing ApplicationEntity if found
-     */
     public Optional<ApplicationEntity> getApplicationById(UUID id) {
         try {
             log.info("Fetching application by id: {}", id);
@@ -131,12 +113,6 @@ public class ApplicationService {
         }
     }
 
-    /**
-     * Updates application status.
-     *
-     * @param applicationId UUID of the application
-     * @param status New status (SUBMITTED, ACCEPTED, REJECTED)
-     */
     public void updateApplicationStatus(UUID applicationId, String status) {
         try {
             log.info("Updating application status: id={}, status={}", applicationId, status);
@@ -158,12 +134,6 @@ public class ApplicationService {
         }
     }
 
-    /**
-     * Verifies application integrity by recalculating hash.
-     *
-     * @param applicationId UUID of the application
-     * @return true if application is untampered, false if tampered
-     */
     public boolean verifyApplicationIntegrity(UUID applicationId) {
         try {
             log.info("Verifying application integrity: {}", applicationId);
@@ -196,9 +166,6 @@ public class ApplicationService {
         }
     }
 
-    /**
-     * Utility method to calculate SHA-256 hash.
-     */
     private String sha256(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

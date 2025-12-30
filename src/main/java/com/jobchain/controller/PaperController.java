@@ -20,15 +20,6 @@ public class PaperController {
     @Autowired
     private PaperService paperService;
 
-    /**
-     * Generates 5 question paper sets (A, B, C, D, E) for a vacancy.
-     * Each set is recorded on blockchain for transparency.
-     *
-     * Endpoint: POST /api/paper/generate-sets?vacancyId={vacancyId}
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return ResponseEntity with list of generated PaperSetEntity and 201 CREATED status
-     */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/generate-sets")
     public ResponseEntity<List<PaperSetEntity>> generatePaperSets(
@@ -54,16 +45,6 @@ public class PaperController {
         }
     }
 
-    /**
-     * Locks paper sets for a specific exam center to prevent tampering.
-     * Called when papers are distributed to exam centers.
-     *
-     * Endpoint: POST /api/paper/lock?vacancyId={vacancyId}&centerId={centerId}
-     *
-     * @param vacancyId UUID of the vacancy
-     * @param centerId Exam center identifier
-     * @return ResponseEntity with success message
-     */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/lock")
     public ResponseEntity<String> lockPaper(
@@ -88,14 +69,6 @@ public class PaperController {
         }
     }
 
-    /**
-     * Retrieves all paper sets for a vacancy.
-     *
-     * Endpoint: GET /api/paper/{vacancyId}
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return ResponseEntity with list of PaperSetEntity
-     */
     @GetMapping("/{vacancyId}")
     public ResponseEntity<List<PaperSetEntity>> getPaperSets(@PathVariable UUID vacancyId) {
         try {

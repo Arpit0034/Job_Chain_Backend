@@ -22,14 +22,6 @@ public class VacancyService {
     @Autowired
     private BlockchainService blockchainService;
 
-    /**
-     * Creates a new job vacancy and records it on blockchain.
-     *
-     * @param title Job title
-     * @param totalPosts Number of available positions
-     * @param paperHash SHA-256 hash of vacancy notification
-     * @return Created VacancyEntity with blockchain transaction hash
-     */
     public VacancyEntity createVacancy(String title, int totalPosts, String paperHash) {
         try {
             log.info("Creating vacancy: title={}, totalPosts={}", title, totalPosts);
@@ -67,11 +59,6 @@ public class VacancyService {
         }
     }
 
-    /**
-     * Retrieves all vacancies from database.
-     *
-     * @return List of all vacancies
-     */
     public List<VacancyEntity> getAllVacancies() {
         try {
             log.info("Fetching all vacancies");
@@ -84,12 +71,6 @@ public class VacancyService {
         }
     }
 
-    /**
-     * Retrieves a specific vacancy by ID.
-     *
-     * @param id UUID of the vacancy
-     * @return Optional containing VacancyEntity if found
-     */
     public Optional<VacancyEntity> getVacancyById(UUID id) {
         try {
             log.info("Fetching vacancy by id: {}", id);
@@ -106,12 +87,6 @@ public class VacancyService {
         }
     }
 
-    /**
-     * Deletes a vacancy from database.
-     * Note: Blockchain record remains immutable.
-     *
-     * @param id UUID of the vacancy to delete
-     */
     public void deleteVacancy(UUID id) {
         try {
             log.info("Deleting vacancy: {}", id);

@@ -32,14 +32,6 @@ public class ExamController {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    /**
-     * Records exam score for a candidate and stores on blockchain.
-     *
-     * Endpoint: POST /api/exam/record-score
-     *
-     * @param request RecordExamScoreRequest with applicationId and marks
-     * @return ResponseEntity with ExamScoreResponse and 201 CREATED status
-     */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/record-score")
     public ResponseEntity<ExamScoreResponse> recordExamScore(
@@ -91,16 +83,6 @@ public class ExamController {
         }
     }
 
-
-    /**
-     * Publishes merit list for a vacancy.
-     * Ranks all candidates based on marks and records on blockchain.
-     *
-     * Endpoint: POST /api/exam/publish-merit?vacancyId={vacancyId}
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return ResponseEntity with PublishMeritResponse
-     */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/publish-merit")
     public ResponseEntity<PublishMeritResponse> publishMerit(@RequestParam UUID vacancyId) {
@@ -164,14 +146,6 @@ public class ExamController {
         }
     }
 
-    /**
-     * Retrieves merit list for a vacancy.
-     *
-     * Endpoint: GET /api/exam/merit?vacancyId={vacancyId}
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return ResponseEntity with GetMeritResponse
-     */
     @GetMapping("/merit")
     public ResponseEntity<GetMeritResponse> getMeritList(@RequestParam UUID vacancyId) {
         try {
@@ -233,15 +207,6 @@ public class ExamController {
         }
     }
 
-    /**
-     * Verifies integrity of merit list by comparing hashes.
-     * Detects if merit list has been tampered with.
-     *
-     * Endpoint: GET /api/exam/verify?vacancyId={vacancyId}
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return ResponseEntity with verification result (verified: true/false)
-     */
     @GetMapping("/verify")
     public ResponseEntity<Map<String, Boolean>> verifyMeritIntegrity(@RequestParam UUID vacancyId) {
         try {

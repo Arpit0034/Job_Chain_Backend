@@ -25,14 +25,6 @@ public class ApplicationController {
     @Autowired
     private ApplicationService applicationService;
 
-    /**
-     * Submits a new job application and records on blockchain.
-     *
-     * Endpoint: POST /api/applications
-     *
-     * @param request CreateApplicationRequest with candidate details
-     * @return ResponseEntity with ApplicationResponse and 201 CREATED status
-     */
     @PreAuthorize("hasAuthority('STUDENT')")
     @PostMapping
     public ResponseEntity<ApplicationResponse> submitApplication(
@@ -56,14 +48,6 @@ public class ApplicationController {
         }
     }
 
-    /**
-     * Retrieves all applications for a specific vacancy.
-     *
-     * Endpoint: GET /api/applications/vacancy/{vacancyId}
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return ResponseEntity with list of ApplicationResponse
-     */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/vacancy/{vacancyId}")
     public ResponseEntity<List<ApplicationResponse>> getApplicationsByVacancy(
@@ -85,14 +69,6 @@ public class ApplicationController {
         }
     }
 
-    /**
-     * Retrieves a specific application by ID.
-     *
-     * Endpoint: GET /api/applications/{id}
-     *
-     * @param id UUID of the application
-     * @return ResponseEntity with ApplicationResponse or 404 if not found
-     */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ApplicationResponse> getApplicationById(@PathVariable UUID id) {
@@ -115,9 +91,6 @@ public class ApplicationController {
         }
     }
 
-    /**
-     * Maps ApplicationEntity to ApplicationResponse DTO.
-     */
     private ApplicationResponse mapToResponse(ApplicationEntity entity) {
         ApplicationResponse response = new ApplicationResponse();
         response.setId(entity.getId());

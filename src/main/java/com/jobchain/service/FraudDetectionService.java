@@ -34,24 +34,8 @@ public class FraudDetectionService {
     @Autowired
     private BlockchainService blockchainService;
 
-    /**
-     * Threshold for paper leak detection.
-     * If more than 500 candidates have identical answer patterns, flag as paper leak.
-     */
     private static final int PAPER_LEAK_THRESHOLD = 500;
 
-    /**
-     * Detects paper leak by analyzing answer patterns.
-     * Algorithm:
-     * 1. Fetch all exam scores for the vacancy
-     * 2. Group candidates by their marking pattern hash (identical answers)
-     * 3. If any group exceeds threshold, flag as paper leak
-     * 4. Record fraud alert on blockchain
-     * 5. Save to database
-     *
-     * @param vacancyId UUID of the vacancy/exam
-     * @return List of fraud alerts generated (empty if no fraud detected)
-     */
     public List<FraudAlertEntity> detectPaperLeak(UUID vacancyId) {
         try {
             log.info("Running paper leak detection for vacancyId: {}", vacancyId);
@@ -121,19 +105,6 @@ public class FraudDetectionService {
         }
     }
 
-    /**
-     * Detects OMR sheet tampering by comparing QR code hashes.
-     *
-     * How it works:
-     * - Each OMR sheet has a unique QR code generated at print time
-     * - QR code contains encrypted candidate info and anti-tampering key
-     * - During scanning, QR code is read and hash is compared with stored hash
-     * - If hashes don't match, OMR sheet has been tampered with
-     *
-     * @param storedQrHash Original QR code hash from database
-     * @param scannedQrHash QR code hash read during OMR scanning
-     * @return true if OMR is genuine (hashes match), false if tampered (hashes don't match)
-     */
     public boolean detectOMRTampering(String storedQrHash, String scannedQrHash) {
         try {
             log.info("Checking OMR sheet authenticity");
@@ -162,13 +133,6 @@ public class FraudDetectionService {
         }
     }
 
-    /**
-     * Retrieves all fraud alerts for a specific vacancy.
-     * Used for investigation and audit purposes.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return List of all fraud alerts for the vacancy
-     */
     public List<FraudAlertEntity> getFraudAlerts(UUID vacancyId) {
         try {
             log.info("Fetching fraud alerts for vacancyId: {}", vacancyId);
@@ -189,16 +153,6 @@ public class FraudDetectionService {
         }
     }
 
-    /**
-     * Detects marks anomaly by analyzing score distribution.
-     * Flags suspicious patterns like:
-     * - Unusually high scores across all candidates
-     * - Sudden spike in scores compared to historical data
-     * - Abnormal score distribution
-     *
-     * @param vacancyId UUID of the vacancy/exam
-     * @return List of fraud alerts if anomaly detected
-     */
     public List<FraudAlertEntity> detectMarksAnomaly(UUID vacancyId) {
         try {
             log.info("Running marks anomaly detection for vacancyId: {}", vacancyId);
@@ -266,13 +220,6 @@ public class FraudDetectionService {
         }
     }
 
-    /**
-     * Generates evidence hash from list of suspect exam scores.
-     * Creates a hash of all application IDs involved in fraud.
-     *
-     * @param suspects List of suspect exam scores
-     * @return SHA-256 hash of evidence
-     */
     private String generateEvidenceHash(List<ExamScoreEntity> suspects) {
         try {
             // Concatenate all application IDs
@@ -289,13 +236,6 @@ public class FraudDetectionService {
         }
     }
 
-    /**
-     * Utility method to calculate SHA-256 hash.
-     * Used for generating pattern hashes and evidence hashes.
-     *
-     * @param input String to hash
-     * @return Hexadecimal hash string (64 characters)
-     */
     private String sha256(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -313,13 +253,6 @@ public class FraudDetectionService {
         }
     }
 
-    /**
-     * Verifies if a fraud alert exists for a vacancy.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @param alertType Type of fraud alert (PAPER_LEAK, OMR_TAMPER, MARKS_ANOMALY)
-     * @return true if alert exists, false otherwise
-     */
     public boolean hasFraudAlert(UUID vacancyId, String alertType) {
         try {
             List<FraudAlertEntity> alerts = fraudAlertRepository.findByVacancyId(vacancyId);
@@ -339,12 +272,6 @@ public class FraudDetectionService {
         }
     }
 
-    /**
-     * Gets total count of fraud alerts for a vacancy.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return Count of fraud alerts
-     */
     public int getFraudAlertCount(UUID vacancyId) {
         try {
             List<FraudAlertEntity> alerts = fraudAlertRepository.findByVacancyId(vacancyId);

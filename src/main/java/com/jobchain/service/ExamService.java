@@ -35,15 +35,6 @@ public class ExamService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    /**
-     * Records exam score for a candidate and stores on blockchain.
-     *
-     * @param vacancyId UUID of the vacancy/exam
-     * @param applicationId UUID of the candidate's application
-     * @param marks Marks obtained
-     * @param markingJson Detailed marking breakdown in JSON format
-     * @return Saved ExamScoreEntity
-     */
     public ExamScoreEntity recordExamScore(UUID vacancyId, UUID applicationId, double marks, String markingJson) {
         try {
             log.info("Recording exam score: vacancyId={}, applicationId={}, marks={}", vacancyId, applicationId, marks);
@@ -90,13 +81,6 @@ public class ExamService {
         }
     }
 
-    /**
-     * Publishes merit list for a vacancy.
-     * Fetches all applications and scores, sorts by marks, and records on blockchain.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return Published MeritListEntity
-     */
     public MeritListEntity publishMerit(UUID vacancyId) {
         if (meritListRepository.existsByVacancyId(vacancyId)) {
             throw new IllegalStateException(
@@ -184,13 +168,6 @@ public class ExamService {
         }
     }
 
-
-    /**
-     * Retrieves merit list for a vacancy.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return MeritListEntity if found
-     */
     public MeritListEntity getMeritList(UUID vacancyId) {
         try {
             log.info("Fetching merit list for vacancyId: {}", vacancyId);
@@ -209,12 +186,6 @@ public class ExamService {
         }
     }
 
-    /**
-     * Verifies integrity of merit list by recalculating and comparing hash.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return true if merit list is untampered, false if tampered
-     */
     public boolean verifyMeritIntegrity(UUID vacancyId) {
         try {
             log.info("Verifying merit list integrity for vacancyId: {}", vacancyId);
@@ -248,9 +219,6 @@ public class ExamService {
         }
     }
 
-    /**
-     * Utility method to calculate SHA-256 hash.
-     */
     private String sha256(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

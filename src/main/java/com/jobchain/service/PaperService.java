@@ -12,10 +12,7 @@ import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.*;
 
-/**
- * Service for managing question paper sets.
- * Handles paper generation, distribution, locking, and blockchain integration.
- */
+
 @Service
 @Slf4j
 @Transactional
@@ -29,14 +26,6 @@ public class PaperService {
 
     private static final String[] PAPER_SETS = {"A", "B", "C", "D", "E"};
 
-    /**
-     * Generates 5 question paper sets (A, B, C, D, E) for a vacancy.
-     * Each set has different question order for exam security.
-     * Records each set on blockchain.
-     *
-     * @param vacancyId UUID of the vacancy/exam
-     * @return List of generated PaperSetEntity
-     */
     public List<PaperSetEntity> generatePaperSets(UUID vacancyId) {
         try {
             log.info("Generating paper sets for vacancy: {}", vacancyId);
@@ -91,13 +80,6 @@ public class PaperService {
         }
     }
 
-    /**
-     * Locks all paper sets for a vacancy to prevent tampering.
-     * Called when papers are distributed to exam centers.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @param centerId Exam center identifier
-     */
     public void lockPaper(UUID vacancyId, String centerId) {
         try {
             log.info("Locking papers for vacancy: {}, center: {}", vacancyId, centerId);
@@ -135,12 +117,6 @@ public class PaperService {
         }
     }
 
-    /**
-     * Retrieves all paper sets for a vacancy.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return List of PaperSetEntity
-     */
     public List<PaperSetEntity> getPaperSets(UUID vacancyId) {
         try {
             log.info("Fetching paper sets for vacancy: {}", vacancyId);
@@ -161,13 +137,6 @@ public class PaperService {
         }
     }
 
-    /**
-     * Retrieves a specific paper set by set ID.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @param setId Paper set identifier (A, B, C, D, E)
-     * @return Optional containing PaperSetEntity if found
-     */
     public Optional<PaperSetEntity> getPaperSetBySetId(UUID vacancyId, String setId) {
         try {
             log.info("Fetching paper set: vacancyId={}, setId={}", vacancyId, setId);
@@ -184,12 +153,6 @@ public class PaperService {
         }
     }
 
-    /**
-     * Verifies paper set integrity by recalculating hash.
-     *
-     * @param paperSetId UUID of the paper set
-     * @return true if paper is untampered, false if tampered
-     */
     public boolean verifyPaperIntegrity(UUID paperSetId) {
         try {
             log.info("Verifying paper integrity: {}", paperSetId);
@@ -225,11 +188,6 @@ public class PaperService {
         }
     }
 
-    /**
-     * Unlocks paper sets (admin operation for corrections).
-     *
-     * @param vacancyId UUID of the vacancy
-     */
     public void unlockPapers(UUID vacancyId) {
         try {
             log.warn("ADMIN ACTION: Unlocking papers for vacancy: {}", vacancyId);
@@ -249,21 +207,7 @@ public class PaperService {
         }
     }
 
-    /**
-     * Generates paper content for a specific set.
-     * In production, this would fetch actual questions from question bank.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @param setId Paper set identifier
-     * @return Paper content as string
-     */
     private String generatePaperContent(UUID vacancyId, String setId) {
-        // In production, this would:
-        // 1. Fetch questions from question bank
-        // 2. Randomize question order based on setId
-        // 3. Generate complete paper with instructions
-
-        // For now, generate mock content
         StringBuilder content = new StringBuilder();
         content.append("VACANCY ID: ").append(vacancyId).append("\n");
         content.append("PAPER SET: ").append(setId).append("\n");
@@ -271,7 +215,6 @@ public class PaperService {
         content.append("DURATION: 3 hours\n");
         content.append("TIMESTAMP: ").append(LocalDateTime.now()).append("\n");
 
-        // Add mock questions
         for (int i = 1; i <= 100; i++) {
             content.append("Q").append(i).append(": Question ").append(i)
                     .append(" for set ").append(setId).append("\n");
@@ -280,9 +223,6 @@ public class PaperService {
         return content.toString();
     }
 
-    /**
-     * Utility method to calculate SHA-256 hash.
-     */
     private String sha256(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -299,12 +239,6 @@ public class PaperService {
         }
     }
 
-    /**
-     * Gets count of paper sets for a vacancy.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return Count of paper sets
-     */
     public int getPaperSetCount(UUID vacancyId) {
         try {
             List<PaperSetEntity> paperSets = paperSetRepository.findByVacancyId(vacancyId);
@@ -315,12 +249,6 @@ public class PaperService {
         }
     }
 
-    /**
-     * Checks if all paper sets are locked for a vacancy.
-     *
-     * @param vacancyId UUID of the vacancy
-     * @return true if all sets are locked, false otherwise
-     */
     public boolean areAllPapersLocked(UUID vacancyId) {
         try {
             List<PaperSetEntity> paperSets = paperSetRepository.findByVacancyId(vacancyId);

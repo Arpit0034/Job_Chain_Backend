@@ -26,14 +26,6 @@ public class VacancyController {
     @Autowired
     private VacancyService vacancyService;
 
-    /**
-     * Creates a new job vacancy and records on blockchain.
-     *
-     * Endpoint: POST /api/vacancies
-     *
-     * @param request CreateVacancyRequest containing title and totalPosts
-     * @return ResponseEntity with VacancyResponse and 201 CREATED status
-     */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<VacancyResponse> createVacancy(@Valid @RequestBody CreateVacancyRequest request) {
@@ -65,13 +57,6 @@ public class VacancyController {
         }
     }
 
-    /**
-     * Retrieves all vacancies from database.
-     *
-     * Endpoint: GET /api/vacancies
-     *
-     * @return ResponseEntity with list of VacancyResponse
-     */
     @GetMapping
     public ResponseEntity<List<VacancyResponse>> getAllVacancies() {
         try {
@@ -91,14 +76,6 @@ public class VacancyController {
         }
     }
 
-    /**
-     * Retrieves a specific vacancy by ID.
-     *
-     * Endpoint: GET /api/vacancies/{id}
-     *
-     * @param id UUID of the vacancy
-     * @return ResponseEntity with VacancyResponse or 404 if not found
-     */
     @GetMapping("/{id}")
     public ResponseEntity<VacancyResponse> getVacancyById(@PathVariable UUID id) {
         try {
@@ -120,9 +97,6 @@ public class VacancyController {
         }
     }
 
-    /**
-     * Maps VacancyEntity to VacancyResponse DTO.
-     */
     private VacancyResponse mapToResponse(VacancyEntity entity) {
         VacancyResponse response = new VacancyResponse();
         response.setId(entity.getId());
